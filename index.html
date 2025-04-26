@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Anlamlı Cümle Oluşturma ve Puan Egzersizi</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+      background-color: #f0f4f8;
+    }
+    #words {
+      font-size: 24px;
+      margin: 20px 0;
+    }
+    #answer {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+      display: none;
+    }
+    #score, #highscore {
+      font-size: 20px;
+      margin: 10px;
+      color: #333;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    select {
+      padding: 5px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Anlamlı Cümle Oluşturma Egzersizi</h1>
+
+  <label for="speed">Hız Seç:</label>
+  <select id="speed">
+    <option value="5000">Yavaş (5 sn)</option>
+    <option value="3000">Normal (3 sn)</option>
+    <option value="1500">Hızlı (1.5 sn)</option>
+  </select>
+  
+  <div id="words"></div>
+
+  <input type="text" id="userGuess" placeholder="Cümleyi buraya yaz..." style="width:300px; padding:8px; font-size:16px;">
+  <br>
+
+  <button onclick="submitGuess()">Cevabı Kontrol Et</button>
+  <button onclick="showAnswer()">Doğru Cevabı Göster</button>
+  <button onclick="nextSentence()">Sonraki Cümle</button>
+
+  <div id="answer"></div>
+  <div id="score">Puan: 0</div>
+  <div id="highscore">En Yüksek Puan: 0</div>
+
+  <script>
+    const sentences = [
+      "Sessizlik bazen en güçlü cevaptır",
+      "Hayaller cesaretle büyür ve gelişir",
+      "Zorluklar karakterimizin aynasıdır",
+      "Başarı sabır ve azim gerektirir",
+      "Hatalar öğrenmenin temel taşlarıdır",
+      "Umut karanlıkta doğan bir ışıktır",
+      "Sevgi en derin yaraları iyileştirir",
+      "Bilgi paylaştıkça çoğalan bir hazinedir",
+      "Gerçek güç sessiz kalabilmektir bazen",
+      "Hayat küçük anlarda gizlidir aslında",
+      "Fırtınalar güçlü ağaçları yetiştirir",
+      "İnanç düşerken bile ayağa kaldırır",
+      "Zaman en adil yargıçtır hayatımızda",
+      "Sabır görünmeyeni bekleme sanatıdır",
+      "Dostluk en zor zamanlarda belli olur",
+      "Bir tebessüm karanlığı aydınlatabilir",
+      "Kaybetmek yeni başlangıçların kapısıdır",
+      "Kendine inanmak mucizeleri başlatır",
+      "Sözler yaralar sessizlik onarır bazen",
+      "Derin düşünceler sessizlikte büyür",
+      "Başarısızlık doğru adımların habercisidir",
+      "İçsel huzur dış dünyanın gürültüsünü yener",
+      "Her son yeni bir hikâyenin başlangıcıdır",
+      "Gerçek mutluluk küçük şeylerde gizlidir",
+      "Cesaret korkuların üstünden yürümektir",
+      "Hayaller vazgeçmeyenlerin ödülüdür",
+      "Karanlık olmadan yıldızlar parlamaz",
+      "Düşler gerçeklere dönüşmeyi bekler",
+      "Gözyaşları kalbin sessiz dilidir",
+      "Başkalarının ışığına yol olabilirsin"
+    ];
+
+    let currentSentence = "";
+    let shuffledWords = [];
+    let score = 0;
+    let highscore = 0;
+    let timer;
+
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    function nextSentence() {
+      clearTimeout(timer);
+      document.getElementById("userGuess").value = "";
+      const randomIndex = Math.floor(Math.random() * sentences.length);
+      currentSentence = sentences[randomIndex];
+      const words = currentSentence.split(" ");
+      shuffledWords = shuffle(words);
+      document.getElementById("words").innerText = shuffledWords.join(" ");
+      document.getElementById("answer").style.display = "none";
+
+      const speed = document.getElementById("speed").value;
+      timer = setTimeout(showAnswer, speed);
+    }
+
+    function showAnswer() {
+      clearTimeout(timer);
+      document.getElementById("answer").innerText = "Doğru Cümle: " + currentSentence;
+      document.getElementById("answer").style.display = "block";
+    }
+
+    function submitGuess() {
+      const guess = document.getElementById("userGuess").value.trim();
+      if (guess === currentSentence) {
+        score += 10;
+        alert("Doğru! +10 puan");
+      } else {
+        score -= 5;
+        alert("Yanlış! -5 puan");
+      }
+      if (score > highscore) {
+        highscore = score;
+      }
+      document.getElementById("score").innerText = "Puan: " + score;
+      document.getElementById("highscore").innerText = "En Yüksek Puan: " + highscore;
+    }
+
+    // Başlangıçta bir cümle gösterelim
+    nextSentence();
+  </script>
+
+</body>
+</html>
